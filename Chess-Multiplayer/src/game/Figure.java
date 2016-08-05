@@ -61,7 +61,7 @@ public abstract class Figure {
 		return this.color;
 	}
 	
-	protected boolean canMove(int x, int y){
+	protected boolean checkColor(int x, int y){
 		return !Board.field[x][y].getColor().equals(color);
 	}
 }

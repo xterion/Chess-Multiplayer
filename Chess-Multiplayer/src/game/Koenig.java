@@ -21,8 +21,40 @@ public class Koenig extends Figure{
 
 	@Override
 	public void checkFields() {
-		// TODO Auto-generated method stub
+		//	   ooo
+		//	   oXo
+		//	   ooo
 		
+		int checkX = x;
+		int checkY = y;
+		
+		//upper row
+		checkY = y-1;
+		for(checkX = x-1; checkX <= x + 1; checkX++){
+			if(Board.isOnBoard(checkX, checkY)){
+				Board.moves[checkX][checkY] = Board.field[checkX][checkY] == null? true : checkColor(checkX, checkY);
+			}
+		}
+		
+		//left
+		checkX = x-1;
+		checkY = y;
+		if(Board.isOnBoard(checkX, checkY)){
+			Board.moves[checkX][checkY] = Board.field[checkX][checkY] == null? true : checkColor(checkX, checkY);
+		}
+		//right
+		checkX = x+1;
+		checkY = y;
+		if(Board.isOnBoard(checkX, checkY)){
+			Board.moves[checkX][checkY] = Board.field[checkX][checkY] == null? true : checkColor(checkX, checkY);
+		}
+		//bottom row
+		checkY = y+1;
+		for(checkX = x-1; checkX <= x + 1; checkX++){
+			if(Board.isOnBoard(checkX, checkY)){
+				Board.moves[checkX][checkY] = Board.field[checkX][checkY] == null? true : checkColor(checkX, checkY);
+			}
+		}
 	}
 
 }

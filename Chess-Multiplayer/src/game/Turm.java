@@ -32,7 +32,7 @@ public class Turm extends Figure{
 		checkY = y-1;
 		do{
 			if(!Board.isOnBoard(x, checkY)) break;
-			Board.moves[x][checkY] = canMove(x, checkY);
+			Board.moves[x][checkY] = Board.field[x][checkY] == null? true : checkColor(x, checkY);
 			checkY--;
 		}while(Board.field[x][checkY]== null);
 		
@@ -40,7 +40,7 @@ public class Turm extends Figure{
 		checkY = y+1;
 		do{
 			if(!Board.isOnBoard(x, checkY)) break;
-			Board.moves[x][checkY] = canMove(x, checkY);
+			Board.moves[x][checkY] = Board.field[x][checkY] == null? true : checkColor(x, checkY);
 			checkY++;
 		}while(Board.field[x][checkY]== null);
 		
@@ -48,15 +48,15 @@ public class Turm extends Figure{
 		checkX = x-1;
 		do{
 			if(!Board.isOnBoard(checkX, y)) break;
-			Board.moves[checkX][y] = canMove(checkX, y);
+			Board.moves[checkX][y] = Board.field[checkX][y] == null? true : checkColor(checkX, y);
 			checkX--;
 		}while(Board.field[checkX][y]== null);
 		
-		//left
+		//right
 		checkX = x+1;
 		do{
 			if(!Board.isOnBoard(checkX, y)) break;
-			Board.moves[checkX][y] = canMove(checkX, y);
+			Board.moves[checkX][y] = Board.field[checkX][y] == null? true : checkColor(checkX, y);
 			checkX++;
 		}while(Board.field[checkX][y]== null);
 		
