@@ -62,6 +62,6 @@ public abstract class Figure {
 	}
 	
 	protected boolean canMove(int x, int y){
-		return x >= 0 && x <= 7 && y >= 0 && y <= 7 && !Board.field[x][y].getColor().equals(color);
+		return !Board.field[x][y].getColor().equals(color);
 	}
 }
