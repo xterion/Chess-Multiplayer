@@ -1,5 +1,9 @@
 package game;
 
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
+import org.newdawn.slick.SlickException;
+
 public abstract class Figure {
 
 	public enum COLOR{
@@ -16,15 +20,26 @@ public abstract class Figure {
 	protected int y;
 	protected boolean isSelected = false;
 	
+	protected Image img;
+	
 	public Figure(int x, int y, TYPE type, COLOR color){
 		this.x = x;
 		this.y = y;
 		this.type = type;
 		this.color = color;
+		
+		try {
+			img = new Image("res/" + this.type.toString().toLowerCase() + "_" + this.color.toString().toLowerCase() + ".png");
+		} catch (SlickException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	//draw the figure
-	public abstract void render();
+	public  void render(Graphics g){
+		//check type and color then draw
+		img.draw(Game.SCREEN_WIDTH/2 - 4*Board.FIELDSIZE + x*Board.FIELDSIZE, Game.SCREEN_HEIGHT/2 - 4*Board.FIELDSIZE + y*Board.FIELDSIZE, Board.FIELDSIZE, Board.FIELDSIZE);
+	}
 	
 	//update the logic
 	public abstract void update();
@@ -63,5 +78,10 @@ public abstract class Figure {
 	
 	protected boolean checkColor(int x, int y){
 		return !Board.field[x][y].getColor().equals(color);
+	}
+
+	public void render() {
+		// TODO Auto-generated method stub
+		
 	}
 }
