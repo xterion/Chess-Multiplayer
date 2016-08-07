@@ -10,6 +10,7 @@ public class Board {
 	public static Figure field[][] = new Figure[8][8];
 	public static boolean moves[][] = new boolean[8][8];
 	public static final int FIELDSIZE = 64;
+	private Figure selected;
 	
 	//init a new chess-board
 	public void init(){
@@ -53,9 +54,19 @@ public class Board {
     				int posX = Game.SCREEN_WIDTH/2 - 4*FIELDSIZE + j*FIELDSIZE;
     				int posY = Game.SCREEN_HEIGHT/2 - 4*FIELDSIZE + i*FIELDSIZE;
     				
-    				if(mx >= posX && mx <= posX+FIELDSIZE && my >= posY && my <= posY+FIELDSIZE && field[j][i] != null){
-    					unselect();
-    					field[j][i].setSelected(true);
+    				if(mx >= posX && mx <= posX+FIELDSIZE && my >= posY && my <= posY+FIELDSIZE){
+    					//selecting a piece
+    					if(field[j][i] != null){
+	    					unselect();
+	    					field[j][i].setSelected(true);
+	    					selected = field[j][i];
+    					}else if(selected != null && moves[j][i]){
+    						//moving a piece, deal with player turns and kicks
+    						field[selected.x][selected.y] = null;
+    						field[j][i] = selected;
+    						selected.setPosition(j, i);
+	    					unselect();
+    					}
     				}
     			}
     		}
@@ -96,5 +107,6 @@ public class Board {
 		}
 		
 		moves = new boolean[8][8];
+		selected = null;
 	}
 }
