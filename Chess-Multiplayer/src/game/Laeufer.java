@@ -24,7 +24,7 @@ public class Laeufer extends Figure{
 			Board.moves[checkX][checkY] = Board.field[checkX][checkY] == null? true : checkColor(checkX, checkY);
 			checkX--;
 			checkY--;
-		}while(Board.field[checkX][checkY]== null);
+		}while(Board.isOnBoard(checkX, checkY) && Board.field[checkX][checkY]== null);
 		
 		//up-right
 		checkX = x+1;
@@ -34,7 +34,7 @@ public class Laeufer extends Figure{
 			Board.moves[checkX][checkY] = Board.field[checkX][checkY] == null? true : checkColor(checkX, checkY);
 			checkX++;
 			checkY--;
-		}while(Board.field[checkX][checkY]== null);
+		}while(Board.isOnBoard(checkX, checkY) && Board.field[checkX][checkY]== null);
 		
 		//down-left
 		checkX = x-1;
@@ -44,7 +44,7 @@ public class Laeufer extends Figure{
 			Board.moves[checkX][checkY] = Board.field[checkX][checkY] == null? true : checkColor(checkX, checkY);
 			checkX--;
 			checkY++;
-		}while(Board.field[checkX][checkY]== null);
+		}while(Board.isOnBoard(checkX, checkY) && Board.field[checkX][checkY]== null);
 		
 		//down-right
 		checkX = x+1;
@@ -54,7 +54,7 @@ public class Laeufer extends Figure{
 			Board.moves[checkX][checkY] = Board.field[checkX][checkY] == null? true : checkColor(checkX, checkY);
 			checkX++;
 			checkY++;
-		}while(Board.field[checkX][checkY]== null);
+		}while(Board.isOnBoard(checkX, checkY) && Board.field[checkX][checkY]== null);
 	}
 
 }
