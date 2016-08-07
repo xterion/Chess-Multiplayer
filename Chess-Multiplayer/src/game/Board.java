@@ -40,6 +40,7 @@ public class Board {
 		for(int i = 0; i <= 7; i++){
 			field[i][6] = new Bauer(i,6,COLOR.WHITE);
 		}
+		
 	}
 	
 	public void update(){

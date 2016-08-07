@@ -17,36 +17,57 @@ public class Turm extends Figure{
 		int checkY = y;
 		
 		//up
+		checkX = x;
 		checkY = y-1;
-		do{
-			if(!Board.isOnBoard(x, checkY)) break;
+		while(Board.isOnBoard(checkX, checkY)){
+			if(Board.field[checkX][checkY]== null){
+				Board.moves[checkX][checkY] = true;
+			}else{
+				Board.moves[checkX][checkY] = checkColor(checkX, checkY);
+				break;
+			}
 			Board.moves[x][checkY] = Board.field[x][checkY] == null? true : checkColor(x, checkY);
 			checkY--;
-		}while(Board.field[x][checkY]== null);
+		}
 		
 		//down
+		checkX = x;
 		checkY = y+1;
-		do{
-			if(!Board.isOnBoard(x, checkY)) break;
-			Board.moves[x][checkY] = Board.field[x][checkY] == null? true : checkColor(x, checkY);
+		while(Board.isOnBoard(checkX, checkY)){
+			if(Board.field[checkX][checkY]== null){
+				Board.moves[checkX][checkY] = true;
+			}else{
+				Board.moves[checkX][checkY] = checkColor(checkX, checkY);
+				break;
+			}
 			checkY++;
-		}while(Board.field[x][checkY]== null);
+		}
 		
 		//left
 		checkX = x-1;
-		do{
-			if(!Board.isOnBoard(checkX, y)) break;
-			Board.moves[checkX][y] = Board.field[checkX][y] == null? true : checkColor(checkX, y);
+		checkY = y;
+		while(Board.isOnBoard(checkX, checkY)){
+			if(Board.field[checkX][checkY]== null){
+				Board.moves[checkX][checkY] = true;
+			}else{
+				Board.moves[checkX][checkY] = checkColor(checkX, checkY);
+				break;
+			}
 			checkX--;
-		}while(Board.field[checkX][y]== null);
+		}
 		
 		//right
 		checkX = x+1;
-		do{
-			if(!Board.isOnBoard(checkX, y)) break;
-			Board.moves[checkX][y] = Board.field[checkX][y] == null? true : checkColor(checkX, y);
+		checkY = y;
+		while(Board.isOnBoard(checkX, checkY)){
+			if(Board.field[checkX][checkY]== null){
+				Board.moves[checkX][checkY] = true;
+			}else{
+				Board.moves[checkX][checkY] = checkColor(checkX, checkY);
+				break;
+			}
 			checkX++;
-		}while(Board.field[checkX][y]== null);
+		}
 		
 	}
 
