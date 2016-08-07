@@ -1,18 +1,10 @@
 package game;
 
-import org.newdawn.slick.Graphics;
-
 public class Bauer extends Figure {
 
 	public Bauer(int x, int y, COLOR color) {
 		super(x, y, TYPE.BAUER, color);
 		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

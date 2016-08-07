@@ -43,7 +43,23 @@ public class Board {
 	}
 	
 	public void update(){
-		
+		if (Game.getInput().isMousePressed(Game.getInput().MOUSE_LEFT_BUTTON)) {
+        	int mx = Game.getInput().getMouseX();
+        	int my = Game.getInput().getMouseY();
+        	
+        	for(int i = 0; i <= 7; i++){
+    			for(int j = 0; j <= 7; j++){
+    				int posX = Game.SCREEN_WIDTH/2 - 4*FIELDSIZE + j*FIELDSIZE;
+    				int posY = Game.SCREEN_HEIGHT/2 - 4*FIELDSIZE + i*FIELDSIZE;
+    				
+    				if(mx >= posX && mx <= posX+FIELDSIZE && my >= posY && my <= posY+FIELDSIZE && field[j][i] != null){
+    					unselect();
+    					field[j][i].setSelected(true);
+    				}
+    			}
+    		}
+        	
+        }
 	}
 	
 	public void render(Graphics g){
@@ -51,7 +67,9 @@ public class Board {
 		for(int i = 0; i <= 7; i++){
 			for(int j = 0; j <= 7; j++){
 				
-				if((i*7 + j)% 2 == 0){ 
+				if(moves[j][i]){
+					g.setColor(Color.yellow);
+				}else if((i*7 + j)% 2 == 0){ 
 					g.setColor(Color.gray);
 				}else{
 					g.setColor(Color.orange);
@@ -67,5 +85,15 @@ public class Board {
 	
 	public static boolean isOnBoard(int x,int y){
 		return x >= 0 && x <= 7 && y >= 0 && y <= 7;
+	}
+	
+	private void unselect(){
+		for (Figure[] figures : field) {
+			for (Figure figure : figures) {
+				if(figure != null) figure.setSelected(false);
+			}
+		}
+		
+		moves = new boolean[8][8];
 	}
 }

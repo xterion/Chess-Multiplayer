@@ -42,7 +42,9 @@ public abstract class Figure {
 	}
 	
 	//update the logic
-	public abstract void update();
+	public void update(){
+        
+	}
 	
 	//on click on figure check the valid positions where the figure can move to
 	public abstract void checkFields();
@@ -66,6 +68,10 @@ public abstract class Figure {
 	
 	public void setSelected(boolean selected){
 		this.isSelected = selected;
+		
+		if(selected){
+			checkFields();
+		}
 	}
 	
 	public boolean isSelected(){
@@ -77,11 +83,11 @@ public abstract class Figure {
 	}
 	
 	protected boolean checkColor(int x, int y){
-		return !Board.field[x][y].getColor().equals(color);
-	}
-
-	public void render() {
-		// TODO Auto-generated method stub
+		boolean notSame = true;
 		
+		if(Board.field[x][y] != null){
+			notSame = !Board.field[x][y].getColor().equals(color);
+		}
+		return notSame;
 	}
 }

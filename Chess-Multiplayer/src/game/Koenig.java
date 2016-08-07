@@ -8,12 +8,6 @@ public class Koenig extends Figure{
 	}
 
 	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void checkFields() {
 		//	   ooo
 		//	   oXo

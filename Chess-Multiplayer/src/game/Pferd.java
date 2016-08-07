@@ -8,12 +8,6 @@ public class Pferd extends Figure{
 	}
 
 	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void checkFields() {
 		//     o.o
 		//	  o...o

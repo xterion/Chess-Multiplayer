@@ -5,6 +5,7 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
 public class Game extends BasicGame {
@@ -16,6 +17,7 @@ public class Game extends BasicGame {
 	private static AppGameContainer app;
 	private static Graphics graphics;
 	private static Game game;
+	private static Input input;
 	
 	private static Board board;
 
@@ -49,6 +51,7 @@ public class Game extends BasicGame {
 	@Override
 	public void init(GameContainer gameContainer) throws SlickException {
 		graphics = gameContainer.getGraphics();
+		input = gameContainer.getInput();
 		
 		board = new Board();
 		board.init();
@@ -57,8 +60,13 @@ public class Game extends BasicGame {
 	@Override
 	public void update(GameContainer gameContainer, int arg1)
 			throws SlickException {
+		board.update();
 	}
 
+	public static Input getInput(){
+		return input;
+	}
+	
 	public static Graphics getGraphics() {
 		return graphics;
 	}
