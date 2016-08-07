@@ -55,8 +55,8 @@ public class Board {
     				int posY = Game.SCREEN_HEIGHT/2 - 4*FIELDSIZE + i*FIELDSIZE;
     				
     				if(mx >= posX && mx <= posX+FIELDSIZE && my >= posY && my <= posY+FIELDSIZE){
-    					//selecting a piece
-    					if(field[j][i] != null){
+    					//selecting or kicking a piece
+    					if(field[j][i] != null && !moves[j][i]){
 	    					unselect();
 	    					field[j][i].setSelected(true);
 	    					selected = field[j][i];
@@ -72,6 +72,10 @@ public class Board {
     		}
         	
         }
+		
+		if(Game.getInput().isKeyPressed(Game.getInput().KEY_ESCAPE) && selected != null){
+			unselect();
+		}
 	}
 	
 	public void render(Graphics g){
