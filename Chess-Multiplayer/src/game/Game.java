@@ -1,7 +1,5 @@
 package game;
 
-import java.io.IOException;
-
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -9,10 +7,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-
 import network.NetworkInstance;
 import network.NetworkManager;
-import network.NetworkRole;
 
 public class Game extends BasicGame {
 
@@ -72,6 +68,7 @@ public class Game extends BasicGame {
 	public void update(GameContainer gameContainer, int arg1) throws SlickException {
 			board.update();
 			networkInstance.checkInput();
+			board.CountDown();			
 	}
 
 	public static Input getInput() {
