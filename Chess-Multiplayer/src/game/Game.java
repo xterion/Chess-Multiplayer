@@ -1,7 +1,5 @@
 package game;
 
-import java.io.IOException;
-
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -27,6 +25,7 @@ public class Game extends BasicGame {
 	private static Input input;
 
 	public static Board board;
+
 	private static NetworkInstance networkInstance;
 
 	public static void main(String[] args) throws SlickException {
@@ -38,7 +37,6 @@ public class Game extends BasicGame {
 		app.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
 		app.setShowFPS(false);
 		app.setVSync(true);
-		app.setAlwaysRender(true);
 		app.start();
 	}
 
@@ -73,18 +71,7 @@ public class Game extends BasicGame {
 	public void update(GameContainer gameContainer, int arg1) throws SlickException {
 			board.update();
 			networkInstance.checkInput();
-	}
-
-	public static Input getInput() {
-		return input;
-	}
-
-	public static Graphics getGraphics() {
-		return graphics;
-	}
-
-	public static NetworkInstance getNetworkInstance() {
-		return networkInstance;
+			board.CountDown();			
 	}
 	
 	public static void restart(){
@@ -97,6 +84,18 @@ public class Game extends BasicGame {
 		
 		networkInstance = NetworkManager.selectRole();
 		
+	}
+
+	public static Input getInput() {
+		return input;
+	}
+
+	public static Graphics getGraphics() {
+		return graphics;
+	}
+
+	public static NetworkInstance getNetworkInstance() {
+		return networkInstance;
 	}
 
 }
