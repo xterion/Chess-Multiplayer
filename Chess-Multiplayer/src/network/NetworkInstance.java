@@ -5,6 +5,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.Socket;
 
+import javax.swing.JOptionPane;
+
 import game.Game;
 
 public class NetworkInstance {
@@ -24,18 +26,32 @@ public class NetworkInstance {
 		this.myTurn = myTurn;
 	}
 
-	// TODO
-	public void makeTurn(int fromX, int fromY, int toX, int toY) {
+	public int makeTurn(int fromX, int fromY, int toX, int toY) {
 		try {
 			output.write(fromX + " " + fromY + " " + toX + " " + toY);
-			
 			output.newLine();
 			output.flush();
-			System.out.println("made move");
 		} catch (IOException e) {
-			e.printStackTrace();
+			Object[] options = { "Neues Spiel", "Beenden" };
+			int i = JOptionPane.showOptionDialog(null, "Die Verbindung zum Mitspieler wurde unterbrochen.",
+					"Verbindungsabbruch", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, null);
+			switch (i) {
+			case 0:
+				try {
+					socket.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				Game.restart();
+				return 1;
+			default:
+				System.exit(1);
+				break;
+			}
+			
 		}
 		myTurn = false;
+		return 0;
 	}
 
 	// TODO
@@ -44,13 +60,10 @@ public class NetworkInstance {
 			if (input.ready()) {
 
 				String s = input.readLine();
-				System.out.println(s);
-
 				String[] strings = s.split(" ");
 
 				Game.board.move(Integer.valueOf(strings[0]), Integer.valueOf(strings[1]), Integer.valueOf(strings[2]),
 						Integer.valueOf(strings[3]));
-				System.out.println("received");
 
 				myTurn = true;
 			}

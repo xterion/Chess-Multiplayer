@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 
+import network.Host;
 import network.NetworkInstance;
 import network.NetworkManager;
 import network.NetworkRole;
@@ -26,7 +27,6 @@ public class Game extends BasicGame {
 	private static Input input;
 
 	public static Board board;
-
 	private static NetworkInstance networkInstance;
 
 	public static void main(String[] args) throws SlickException {
@@ -38,6 +38,7 @@ public class Game extends BasicGame {
 		app.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
 		app.setShowFPS(false);
 		app.setVSync(true);
+		app.setAlwaysRender(true);
 		app.start();
 	}
 
@@ -84,6 +85,18 @@ public class Game extends BasicGame {
 
 	public static NetworkInstance getNetworkInstance() {
 		return networkInstance;
+	}
+	
+	public static void restart(){
+		if(networkInstance.getRole() == NetworkRole.HOST){
+			((Host) networkInstance).closeServer();
+		}
+		board.init();
+		board.update();
+		board.render(getGraphics());
+		
+		networkInstance = NetworkManager.selectRole();
+		
 	}
 
 }

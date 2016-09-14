@@ -29,6 +29,13 @@ public class Board {
 			field[i][1] = new Bauer(i, 1, COLOR.BLACK);
 		}
 
+		// Empty fields
+		for (int i = 0; i <= 7; i++) {
+			for (int j = 2; j <= 5; j++) {
+				field[i][j] = null;
+			}
+		}
+
 		// WHITE
 		field[0][7] = new Turm(0, 7, COLOR.WHITE);
 		field[1][7] = new Pferd(1, 7, COLOR.WHITE);
@@ -41,6 +48,13 @@ public class Board {
 
 		for (int i = 0; i <= 7; i++) {
 			field[i][6] = new Bauer(i, 6, COLOR.WHITE);
+		}
+		
+		// reset moves in case of restart
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				moves[i][j] = false;
+			}
 		}
 
 	}
@@ -59,18 +73,24 @@ public class Board {
 						// selecting or kicking a piece
 						if (field[j][i] != null && !moves[j][i]) {
 							unselect();
-							//Host can move white and client black
+							// Host can move white and client black
 							if ((Game.getNetworkInstance().getRole() == NetworkRole.HOST
-									&& field[j][i].getColor() == COLOR.WHITE) || (Game.getNetworkInstance().getRole() == NetworkRole.CLIENT
-									&& field[j][i].getColor() == COLOR.BLACK)) {
+									&& field[j][i].getColor() == COLOR.WHITE)
+									|| (Game.getNetworkInstance().getRole() == NetworkRole.CLIENT
+											&& field[j][i].getColor() == COLOR.BLACK)) {
 								field[j][i].setSelected(true);
 								selected = field[j][i];
 							}
 
 						} else if (selected != null && moves[j][i]) {
 							// moving a piece, deal with player turns and kicks
-							Game.getNetworkInstance().makeTurn(selected.getX(), selected.getY(), j, i);
-							move(selected.getX(), selected.getY(), j, i);
+							// feedback about success
+							int status = Game.getNetworkInstance().makeTurn(selected.getX(), selected.getY(), j, i);
+							// move only if move successfully transmitted
+							if(status == 0){
+								move(selected.getX(), selected.getY(), j, i);
+							}
+							
 						}
 					}
 				}
