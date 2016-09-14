@@ -27,7 +27,6 @@ public class Board {
 	private String[] promoteOptions = { "Dame", "Turm", "Läufer", "Pferd" };
 
 	// init a new chess-board
-	// init a new chess-board
 	public void init() {
 		// BLACK
 		field[0][0] = new Turm(0, 0, COLOR.BLACK);
