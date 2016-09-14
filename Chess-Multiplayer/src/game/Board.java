@@ -87,28 +87,24 @@ public class Board {
 	}
 
 	public void update() {
-		if (Game.getInput().isMousePressed(Game.getInput().MOUSE_LEFT_BUTTON)
-				&& Game.getNetworkInstance().isMyTurn()) {
+		if (Game.getInput().isMousePressed(Game.getInput().MOUSE_LEFT_BUTTON) && Game.getNetworkInstance().isMyTurn()) {
 			int mx = Game.getInput().getMouseX();
 			int my = Game.getInput().getMouseY();
 
 			for (int i = 0; i <= 7; i++) {
 				for (int j = 0; j <= 7; j++) {
-					int posX = Game.SCREEN_WIDTH / 2 - 4 * FIELDSIZE + j
-							* FIELDSIZE;
-					int posY = Game.SCREEN_HEIGHT / 2 - 4 * FIELDSIZE + i
-							* FIELDSIZE;
+					int posX = Game.SCREEN_WIDTH / 2 - 4 * FIELDSIZE + j * FIELDSIZE;
+					int posY = Game.SCREEN_HEIGHT / 2 - 4 * FIELDSIZE + i * FIELDSIZE;
 
-					if (mx >= posX && mx <= posX + FIELDSIZE && my >= posY
-							&& my <= posY + FIELDSIZE) {
+					if (mx >= posX && mx <= posX + FIELDSIZE && my >= posY && my <= posY + FIELDSIZE) {
 						// selecting or kicking a piece
 						if (field[j][i] != null && !moves[j][i]) {
 							unselect();
-							//Host can move white and client black
-							if ((Game.getNetworkInstance().getRole() == NetworkRole.HOST && field[j][i]
-									.getColor() == COLOR.WHITE)
-									|| (Game.getNetworkInstance().getRole() == NetworkRole.CLIENT && field[j][i]
-											.getColor() == COLOR.BLACK)) {
+							// Host can move white and client black
+							if ((Game.getNetworkInstance().getRole() == NetworkRole.HOST
+									&& field[j][i].getColor() == COLOR.WHITE)
+									|| (Game.getNetworkInstance().getRole() == NetworkRole.CLIENT
+											&& field[j][i].getColor() == COLOR.BLACK)) {
 								field[j][i].setSelected(true);
 								selected = field[j][i];
 								if (end == true) {
@@ -118,9 +114,22 @@ public class Board {
 
 						} else if (selected != null && moves[j][i]) {
 							// moving a piece, deal with player turns and kicks
-							Game.getNetworkInstance().makeTurn(selected.getX(),
-									selected.getY(), j, i);
-							move(selected.getX(), selected.getY(), j, i);
+							int fromX = selected.getX();
+							int fromY = selected.getY();
+							int toX = j;
+							int toY = i;
+
+							move(fromX, fromY, toX, toY);
+							if (canPromote()) {
+								int promotion = JOptionPane.showOptionDialog(null, "Wähle deine Beförderung",
+										"Beförderung", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+										promoteOptions, promoteOptions[1]);
+								promote(selected, promotion);
+								Game.getNetworkInstance().makeTurn(fromX, fromY, toX, toY, promotion);
+							} else {
+								Game.getNetworkInstance().makeTurn(fromX, fromY, toX, toY);
+							}
+							unselect();
 						}
 					}
 				}
@@ -128,8 +137,7 @@ public class Board {
 
 		}
 
-		if (Game.getInput().isKeyPressed(Game.getInput().KEY_ESCAPE)
-				&& selected != null) {
+		if (Game.getInput().isKeyPressed(Game.getInput().KEY_ESCAPE) && selected != null) {
 			unselect();
 		}
 	}
@@ -156,25 +164,15 @@ public class Board {
 		field[fromX][fromY] = null;
 		field[toX][toY] = selected;
 		selected.setPosition(toX, toY);
-		if (canPromote()) {
-			int promotion = JOptionPane.showOptionDialog(null,
-					"WÃ¤hle deine BefÃ¶rderung", "BefÃ¶rderung",
-					JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-					promoteOptions, promoteOptions[1]);
-			promote(selected, promotion);
-		}
-		unselect();
 		current = time;
 	}
 
 	// let the pawn become a queen
 	public boolean canPromote() {
 		boolean canPromote = false;
-		if (selected.getType().equals(TYPE.BAUER) && selected.getY() == 0
-				&& selected.getColor().equals(COLOR.WHITE)) {
+		if (selected.getType().equals(TYPE.BAUER) && selected.getY() == 0 && selected.getColor().equals(COLOR.WHITE)) {
 			canPromote = true;
-		} else if (selected.getType().equals(TYPE.BAUER)
-				&& selected.getY() == 7
+		} else if (selected.getType().equals(TYPE.BAUER) && selected.getY() == 7
 				&& selected.getColor().equals(COLOR.BLACK)) {
 			canPromote = true;
 		}
@@ -184,25 +182,23 @@ public class Board {
 	public void promote(Figure figure, int promotion) {
 		switch (promotion) {
 		case 0:
-			selected = new Dame(figure.getX(), figure.getY(), figure.getColor());
+			field[figure.getX()][figure.getY()] = new Dame(figure.getX(), figure.getY(), figure.getColor());
 			break;
 		case 1:
-			selected = new Turm(figure.getX(), figure.getY(), figure.getColor());
+			field[figure.getX()][figure.getY()] = new Turm(figure.getX(), figure.getY(), figure.getColor());
 			break;
 		case 2:
-			selected = new Laeufer(figure.getX(), figure.getY(),
-					figure.getColor());
+			field[figure.getX()][figure.getY()] = new Laeufer(figure.getX(), figure.getY(), figure.getColor());
 			break;
 		case 3:
-			selected = new Pferd(figure.getX(), figure.getY(),
-					figure.getColor());
+			field[figure.getX()][figure.getY()] = new Pferd(figure.getX(), figure.getY(), figure.getColor());
 			break;
 		}
 	}
 
 	public void render(Graphics g) {
 
-		// render chess-fields	
+		// render chess-fields
 
 		check();
 
@@ -240,9 +236,8 @@ public class Board {
 				} else {
 					g.setColor(Color.orange);
 				}
-				g.fillRect(Game.SCREEN_WIDTH / 2 - 4 * FIELDSIZE + j
-						* FIELDSIZE, Game.SCREEN_HEIGHT / 2 - 4 * FIELDSIZE + i
-						* FIELDSIZE, FIELDSIZE, FIELDSIZE);
+				g.fillRect(Game.SCREEN_WIDTH / 2 - 4 * FIELDSIZE + j * FIELDSIZE,
+						Game.SCREEN_HEIGHT / 2 - 4 * FIELDSIZE + i * FIELDSIZE, FIELDSIZE, FIELDSIZE);
 
 				if (field[j][i] != null)
 					field[j][i].render(g);
@@ -325,9 +320,8 @@ public class Board {
 			text = "Du hast verloren";
 		}
 
-		int n = JOptionPane.showOptionDialog(null, text, "Spiel beendet",
-				JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
-				null, options, options[0]);
+		int n = JOptionPane.showOptionDialog(null, text, "Spiel beendet", JOptionPane.YES_NO_OPTION,
+				JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
 		if (n == 0) {
 			try {
 				Game.main(null);

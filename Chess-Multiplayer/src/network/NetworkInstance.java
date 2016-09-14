@@ -48,13 +48,40 @@ public class NetworkInstance {
 				System.exit(1);
 				break;
 			}
-			
+
 		}
 		myTurn = false;
 		return 0;
 	}
 
-	// TODO
+	public int makeTurn(int fromX, int fromY, int toX, int toY, int promotion) {
+		try {
+			output.write(fromX + " " + fromY + " " + toX + " " + toY + " " + promotion);
+			output.newLine();
+			output.flush();
+		} catch (IOException e) {
+			Object[] options = { "Neues Spiel", "Beenden" };
+			int i = JOptionPane.showOptionDialog(null, "Die Verbindung zum Mitspieler wurde unterbrochen.",
+					"Verbindungsabbruch", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, null);
+			switch (i) {
+			case 0:
+				try {
+					socket.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				Game.restart();
+				return 1;
+			default:
+				System.exit(1);
+				break;
+			}
+
+		}
+		myTurn = false;
+		return 0;
+	}
+
 	public void checkInput() {
 		try {
 			if (input.ready()) {
@@ -64,6 +91,10 @@ public class NetworkInstance {
 
 				Game.board.move(Integer.valueOf(strings[0]), Integer.valueOf(strings[1]), Integer.valueOf(strings[2]),
 						Integer.valueOf(strings[3]));
+				if (strings.length == 5) {
+					Game.board.promote(Game.board.field[Integer.valueOf(strings[2])][Integer.valueOf(strings[3])],
+							Integer.valueOf(strings[4]));
+				}
 
 				myTurn = true;
 			}
