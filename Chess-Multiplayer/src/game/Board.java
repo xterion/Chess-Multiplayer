@@ -1,17 +1,18 @@
 package game;
 
+import game.Figure.COLOR;
+import game.Figure.TYPE;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JOptionPane;
 
+import network.NetworkRole;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
-
-import game.Figure.COLOR;
-import game.Figure.TYPE;
-import network.NetworkRole;
 
 public class Board {
 
@@ -20,7 +21,7 @@ public class Board {
 	public static final int FIELDSIZE = 64;
 	public boolean timeout = false;
 	private Figure selected;
-	private final int time = 3000; // in hundertstel sekunden
+	private final int time = 300000; // in hundertstel sekunden
 	private int current = time;
 	private boolean recovered;
 	private boolean end = false;
@@ -135,40 +136,66 @@ public class Board {
 
 	public void move(int fromX, int fromY, int toX, int toY) {
 		selected = field[fromX][fromY];
+		if (selected instanceof Turm)
+			((Turm) selected).setMoved(true);
+		if (selected instanceof Koenig) {
+			((Koenig) selected).setMoved(true);
+			if (toX - fromX < -1) { // Rochade links
+				Figure turm = field[0][fromY];
+				field[0][fromY] = null;
+				field[3][fromY] = turm;
+				turm.setPosition(3, fromY);
+			}
+			if (toX - fromX > 1) { // Rochade rechts
+				Figure turm = field[7][fromY];
+				field[7][fromY] = null;
+				field[5][fromY] = turm;
+				turm.setPosition(5, fromY);
+			}
+		}
 		field[fromX][fromY] = null;
 		field[toX][toY] = selected;
 		selected.setPosition(toX, toY);
-		if(canPromote()){
-			int promotion = JOptionPane.showOptionDialog(null, "Wähle deine Beförderung",
-			            "Beförderung", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-			            promoteOptions,
-			            promoteOptions[1]);
+		if (canPromote()) {
+			int promotion = JOptionPane.showOptionDialog(null,
+					"Wähle deine Beförderung", "Beförderung",
+					JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+					promoteOptions, promoteOptions[1]);
 			promote(selected, promotion);
 		}
 		unselect();
 		current = time;
 	}
-	
+
 	// let the pawn become a queen
-	public boolean canPromote(){
+	public boolean canPromote() {
 		boolean canPromote = false;
-		if(selected.getType().equals(TYPE.BAUER) && selected.getY() == 0 && selected.getColor().equals(COLOR.WHITE)){
+		if (selected.getType().equals(TYPE.BAUER) && selected.getY() == 0
+				&& selected.getColor().equals(COLOR.WHITE)) {
 			canPromote = true;
-		}else if(selected.getType().equals(TYPE.BAUER) && selected.getY() == 7 && selected.getColor().equals(COLOR.BLACK)){
+		} else if (selected.getType().equals(TYPE.BAUER)
+				&& selected.getY() == 7
+				&& selected.getColor().equals(COLOR.BLACK)) {
 			canPromote = true;
 		}
 		return canPromote;
 	}
-	
-	public void promote(Figure figure, int promotion){
-		switch(promotion){
-		case 0: selected = new Dame(figure.getX(), figure.getY(), figure.getColor());
+
+	public void promote(Figure figure, int promotion) {
+		switch (promotion) {
+		case 0:
+			selected = new Dame(figure.getX(), figure.getY(), figure.getColor());
 			break;
-		case 1: selected = new Turm(figure.getX(), figure.getY(), figure.getColor());
+		case 1:
+			selected = new Turm(figure.getX(), figure.getY(), figure.getColor());
 			break;
-		case 2: selected = new Laeufer(figure.getX(), figure.getY(), figure.getColor());
+		case 2:
+			selected = new Laeufer(figure.getX(), figure.getY(),
+					figure.getColor());
 			break;
-		case 3: selected = new Pferd(figure.getX(), figure.getY(), figure.getColor());
+		case 3:
+			selected = new Pferd(figure.getX(), figure.getY(),
+					figure.getColor());
 			break;
 		}
 	}
