@@ -37,6 +37,7 @@ public class Game extends BasicGame {
 		app.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
 		app.setShowFPS(false);
 		app.setVSync(true);
+		app.setAlwaysRender(true);
 		app.start();
 	}
 
