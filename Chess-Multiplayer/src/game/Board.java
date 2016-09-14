@@ -1,9 +1,12 @@
 package game;
 
+import javax.swing.JOptionPane;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
 import game.Figure.COLOR;
+import game.Figure.TYPE;
 import network.NetworkRole;
 
 public class Board {
@@ -12,6 +15,7 @@ public class Board {
 	public static boolean moves[][] = new boolean[8][8];
 	public static final int FIELDSIZE = 64;
 	private Figure selected;
+	private String[] promoteOptions = { "Dame", "Turm", "Läufer", "Pferd" };
 
 	// init a new chess-board
 	public void init() {
@@ -88,7 +92,38 @@ public class Board {
 		field[fromX][fromY] = null;
 		field[toX][toY] = selected;
 		selected.setPosition(toX, toY);
+		if(canPromote()){
+			int promotion = JOptionPane.showOptionDialog(null, "Wähle deine Beförderung",
+			            "Beförderung", JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+			            promoteOptions,
+			            promoteOptions[1]);
+			promote(selected, promotion);
+		}
 		unselect();
+	}
+	
+	// let the pawn become a queen
+	public boolean canPromote(){
+		boolean canPromote = false;
+		if(selected.getType().equals(TYPE.BAUER) && selected.getY() == 0 && selected.getColor().equals(COLOR.WHITE)){
+			canPromote = true;
+		}else if(selected.getType().equals(TYPE.BAUER) && selected.getY() == 7 && selected.getColor().equals(COLOR.BLACK)){
+			canPromote = true;
+		}
+		return canPromote;
+	}
+	
+	public void promote(Figure figure, int promotion){
+		switch(promotion){
+		case 0: selected = new Dame(figure.getX(), figure.getY(), figure.getColor());
+			break;
+		case 1: selected = new Turm(figure.getX(), figure.getY(), figure.getColor());
+			break;
+		case 2: selected = new Laeufer(figure.getX(), figure.getY(), figure.getColor());
+			break;
+		case 3: selected = new Pferd(figure.getX(), figure.getY(), figure.getColor());
+			break;
+		}
 	}
 
 	public void render(Graphics g) {

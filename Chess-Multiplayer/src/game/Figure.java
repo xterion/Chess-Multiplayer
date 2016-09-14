@@ -82,6 +82,10 @@ public abstract class Figure {
 		return this.color;
 	}
 	
+	public TYPE getType(){
+		return type;
+	}
+	
 	protected boolean checkColor(int x, int y){
 		boolean notSame = true;
 		
