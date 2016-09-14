@@ -52,7 +52,7 @@ public class NetworkManager {
 		if (retryCounter >= 3) {
 			JOptionPane.showMessageDialog(null,
 					"Die Verbindung konnte nicht hergestellt werden. Das Programm wird beendet.",
-					"Verbindungsaufbau nicht m�glich", JOptionPane.ERROR_MESSAGE);
+					"Verbindungsaufbau nicht möglich", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 
 		}

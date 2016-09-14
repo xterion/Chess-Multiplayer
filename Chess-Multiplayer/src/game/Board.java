@@ -25,7 +25,7 @@ public class Board {
 	private int current = time;
 	private boolean recovered;
 	private boolean end = false;
-	private String[] promoteOptions = { "Dame", "Turm", "L�ufer", "Pferd" };
+	private String[] promoteOptions = { "Dame", "Turm", "Läufer", "Pferd" };
 	private Timer timer;
 	private TimerTask timerTask;
 
@@ -114,7 +114,7 @@ public class Board {
 							move(fromX, fromY, toX, toY);
 							if (canPromote()) {
 								int promotion = JOptionPane.showOptionDialog(null,
-										"W�hle deine Bef�rderung", "Bef�rderung",
+										"Wähle deine Beförderung", "Beförderung",
 										JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE, null,
 										promoteOptions, promoteOptions[1]);
 								promote(selected, promotion);
