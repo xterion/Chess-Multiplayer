@@ -1,5 +1,10 @@
 package game;
 
+import network.Host;
+import network.NetworkInstance;
+import network.NetworkManager;
+import network.NetworkRole;
+
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
@@ -7,11 +12,6 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
-
-import network.Host;
-import network.NetworkInstance;
-import network.NetworkManager;
-import network.NetworkRole;
 
 public class Game extends BasicGame {
 
@@ -50,7 +50,8 @@ public class Game extends BasicGame {
 	}
 
 	@Override
-	public void render(GameContainer gameContainer, Graphics graphics) throws SlickException {
+	public void render(GameContainer gameContainer, Graphics graphics)
+			throws SlickException {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		board.render(graphics);
 	}
@@ -65,26 +66,26 @@ public class Game extends BasicGame {
 
 		board = new Board();
 		board.init();
-		
+
 	}
 
 	@Override
-	public void update(GameContainer gameContainer, int arg1) throws SlickException {
-			board.update();
-			networkInstance.checkInput();
-			board.CountDown();			
+	public void update(GameContainer gameContainer, int arg1)
+			throws SlickException {
+		board.update();
+		networkInstance.checkInput();
 	}
-	
-	public static void restart(){
-		if(networkInstance.getRole() == NetworkRole.HOST){
+
+	public static void restart() {
+		if (networkInstance.getRole() == NetworkRole.HOST) {
 			((Host) networkInstance).closeServer();
 		}
 		board.init();
 		board.update();
 		board.render(getGraphics());
-		
+
 		networkInstance = NetworkManager.selectRole();
-		
+
 	}
 
 	public static Input getInput() {
