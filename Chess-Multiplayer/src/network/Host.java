@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 
+import javax.swing.JOptionPane;
+
 public class Host extends NetworkInstance{
 
 	ServerSocket serverSocket;
@@ -28,7 +30,14 @@ public class Host extends NetworkInstance{
 	public void waitForClient() {
 
 			try {
+				
+				Thread thread = new WaitForConnectionThread();
+				thread.start();
+				
 				socket = serverSocket.accept();
+				
+				thread.interrupt();
+				
 				input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			} catch (IOException e) {

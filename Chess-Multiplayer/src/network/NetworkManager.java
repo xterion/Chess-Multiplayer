@@ -1,6 +1,5 @@
 package network;
 
-
 import javax.swing.JOptionPane;
 
 public class NetworkManager {
@@ -9,7 +8,7 @@ public class NetworkManager {
 
 		Object[] options = { "Host", "Client", "Abbrechen" };
 
-		int n = JOptionPane.showOptionDialog(null, "Do you want to be host or client?", "Network Role Selection",
+		int n = JOptionPane.showOptionDialog(null, "Möchtest du Host (weiß) oder Client (schwarz) sein?", "Network Role Selection",
 				JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, null);
 		NetworkInstance networkInstance = null;
 
@@ -30,15 +29,30 @@ public class NetworkManager {
 		Host host = new Host();
 		host.openServer(9595);
 		host.waitForClient();
-		System.out.println("connected");
 		return host;
 	}
 
 	private static NetworkInstance createClient() {
-		String host = JOptionPane.showInputDialog("Please insert a Hostname", "localhost");
-		
+		String host = JOptionPane.showInputDialog("Bitte die Adresse eines Hostes angeben", "localhost");
+
 		Client client = new Client();
-		client.connect(host, 9595);
+		int status = client.connect(host, 9595);
+		int retryCounter = 0;
+		while (status != 0 && retryCounter < 3) {
+			if(status == 2){
+				host = JOptionPane.showInputDialog("Bitte die Adresse eines Hostes angeben", host);
+			}
+			
+			retryCounter++;
+			status = client.connect(host, 9595);
+		}
+		if (retryCounter >= 3) {
+			JOptionPane.showMessageDialog(null,
+					"Die Verbindung konnte nicht hergestellt werden. Das Programm wird beendet.",
+					"Verbindungsaufbau nicht möglich", JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
+			
+		}
 		return client;
 	}
 
