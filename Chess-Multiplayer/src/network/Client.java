@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 
@@ -23,10 +22,13 @@ public class Client extends NetworkInstance {
 			output = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
 		} catch (IOException e) {
-			Object[] options = { "Ja", "Host ändern", "Nein" };
-			int n = JOptionPane.showOptionDialog(null,
-					"Es gab einen Fehler beim Verbinden zum Server, möchten sie es erneut versuchen?",
-					"Verbindungsfehler", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, null, options, null);
+			Object[] options = { "Ja", "Host Ã¤ndern", "Nein" };
+			int n = JOptionPane
+					.showOptionDialog(
+							null,
+							"Es gab einen Fehler beim Verbinden zum Server, mÃ¶chten sie es erneut versuchen?",
+							"Verbindungsfehler", JOptionPane.YES_NO_OPTION,
+							JOptionPane.ERROR_MESSAGE, null, options, null);
 			if (n == 2) {
 				System.exit(0);
 			} else {
