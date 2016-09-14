@@ -5,12 +5,16 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.Socket;
 
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+import game.Board;
 import game.Game;
 
 public class NetworkInstance {
 
 	private final NetworkRole role;
-
+	
 	private boolean myTurn;
 
 	Socket socket;
