@@ -25,7 +25,7 @@ public class Board {
 	private int current = time;
 	private boolean recovered;
 	private boolean end = false;
-	private String[] promoteOptions = { "Dame", "Turm", "LÃ¤ufer", "Pferd" };
+	private String[] promoteOptions = { "Dame", "Turm", "Läufer", "Pferd" };
 	private Timer timer = new Timer();
 	private TimerTask timerTask = new TimerTask() {
 		@Override
